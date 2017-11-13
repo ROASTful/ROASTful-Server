@@ -23,9 +23,10 @@ client.on('error', err => console.error(err));
 app.use(cors());
 
 // proxy route
+// http://food2fork.com/api/search?key={API_KEY}&q=shredded%20chicken
 app.get('/recipes/*', (req, res) => {
   console.log(`Recipes route for ${req.params[0]}`)
-  const url = `http://food2fork.com/api/search/${request.params[0]}`
+  const url = `http://food2fork.com/api/search?key=${process.env.RECIPE_TOKEN}&q=${request.params[0]}`
   superagent(url);
     .set(`Authorization`, `token ${process.env.RECIPE_TOKEN}`)
     .then(recipes => response.send(recipes.text), err => response.send(err));
