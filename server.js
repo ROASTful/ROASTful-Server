@@ -15,9 +15,9 @@ const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
 
 // database setup
-const client = new pg.Client(process.env.DATABASE_URL);
-client.connect();
-client.on('error', err => console.error(err));
+// const client = new pg.Client(process.env.DATABASE_URL);
+// client.connect();
+// client.on('error', err => console.error(err));
 
 // middleware
 app.use(cors());
@@ -26,11 +26,11 @@ app.use(cors());
 // http://food2fork.com/api/search?key={API_KEY}&q=shredded%20chicken
 app.get('/recipes/*', (req, res) => {
   console.log(`Recipes route for ${req.params[0]}`)
-  const url = `http://food2fork.com/api/search?key=${process.env.RECIPE_TOKEN}&q=${request.params[0]}`
-  superagent(url);
+  const url = `http://food2fork.com/api/search?key=${process.env.RECIPE_TOKEN}&q=${req.params[0]}`
+  superagent(url)
     .set(`Authorization`, `token ${process.env.RECIPE_TOKEN}`)
-    .then(recipes => response.send(recipes.text), err => response.send(err));
-})
+    .then(recipes => res.send(recipes.text), err => res.send(err));
+});
 
 // api endpoints
 app.get('/test', (req, res) => res.send('Hello World'));
