@@ -23,8 +23,9 @@ app.use(cors());
 
 
 // api endpoints
+app.get('/test', (req, res) => res.send('Hello World'));
 
 app.get('/*', (req, res) => res.redirect(CLIENT_URL));
 
-// listen 
+// listen
 app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
