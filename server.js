@@ -14,7 +14,7 @@ const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
 
-// database setup
+// database setup //
 // const client = new pg.Client(process.env.DATABASE_URL);
 // client.connect();
 // client.on('error', err => console.error(err));
@@ -23,13 +23,20 @@ const CLIENT_URL = process.env.CLIENT_URL;
 app.use(cors());
 
 // proxy route
+// http://food2fork.com/api/get?key={API_KEY}&rId=54384
+app.get('/recipes/ingredient/:id', (req, res) => {
+  console.log(`Ingredient request for ${req.params.id}`)
+  const url = `http://food2fork.com/api/get?key=${process.env.RECIPE_TOKEN}&rId=${req.params.id}`
+  superagent(url)
+    .then(ingredients => res.send(ingredients.text), err => res.send(err));
+});
+
 // http://food2fork.com/api/search?key={API_KEY}&q=shredded%20chicken
 app.get('/recipes/*', (req, res) => {
   console.log(`Recipes route for ${req.params[0]}`)
   const url = `http://food2fork.com/api/search?key=${process.env.RECIPE_TOKEN}&q=${req.params[0]}`
   superagent(url)
-    .set(`Authorization`, `token ${process.env.RECIPE_TOKEN}`)
-    .then(recipes => res.send(recipes.text), err => res.send(err));
+  .then(recipes => res.send(recipes.text), err => res.send(err));
 });
 
 // api endpoints
