@@ -40,11 +40,13 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
+
+
 app.post('/v1/users', bodyParser, (request, response) => {
   console.log(request.body);
   client.query(`
-    INSERT INTO users(username, password)
-    Values($1, $2) ON CONFLICT DO NOTHING`,
+    INSERT INTO users(username ON CONFLICT DO NOTHING, password)
+    Values($1, $2)`,
     [request.body.username, request.body.password]
   )
     .then( () => response.sendStatus(201))
