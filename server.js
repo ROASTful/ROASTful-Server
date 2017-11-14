@@ -49,7 +49,7 @@ app.post('/v1/users', bodyParser, (request, response) => {
     Values($1, $2)`,
     [request.body.username, request.body.password]
   )
-    .then( () => response.sendStatus(201))
+    .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
 })
 // api endpoints
