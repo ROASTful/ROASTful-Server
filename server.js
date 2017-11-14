@@ -15,9 +15,9 @@ const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
 
 // database setup //
-// const client = new pg.Client(process.env.DATABASE_URL);
-// client.connect();
-// client.on('error', err => console.error(err));
+const client = new pg.Client(process.env.DATABASE_URL);
+client.connect();
+client.on('error', err => console.error(err));
 
 // middleware
 app.use(cors());
@@ -39,10 +39,60 @@ app.get('/recipes/*', (req, res) => {
   .then(recipes => res.send(recipes.text), err => res.send(err));
 });
 
+app.post('/v1/users', (req, res) => {
+  console.log(request.body);
+
+  client.query(`
+    INSERT INTO users(user, password)
+    Values($1, $2) ON CONFLICT DO NOTHING`,
+    [request.body.user, request.body.password]
+  )
+    .then( () => response.sendStatus(201))
+    .catch(console.error)
+})
+
 // api endpoints
 app.get('/test', (req, res) => res.send('Hello World'));
 
-app.get('/*', (req, res) => res.redirect(CLIENT_URL));
+// app.get('/*', (req, res) => res.redirect(CLIENT_URL));
 
 // listen
 app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
+
+function createDB() {
+  client.query(`
+    CREATE TABLE IF NOT EXISTS
+    users (
+      user_id SERIAL PRIMARY KEY,
+      username VARCHAR(255) NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      pantry VARCHAR(255),
+      recipes VARCHAR(255),
+    );`
+  )
+    .then(console.log('user table created'))
+    .catch(console.error)
+
+    client.query(`
+      CREATE TABLE IF NOT EXISTS
+      ingredients (
+        ingredient_id SERIAL PRIMARY KEY,
+        ingredient_name VARCHAR(255) NOT NULL,
+      );`
+    )
+      .then(console.log('ingredient table created'))
+      .catch(console.error)
+
+      client.query(`
+        CREATE TABLE IF NOT EXISTS
+        recipes (
+          recipe_id SERIAL PRIMARY KEY,
+          recipe_name VARCHAR(255) NOT NULL,
+          recipe_api_id,
+        );`
+      )
+        .then(console.log('table created'))
+        .catch(console.error)
+}
+
+createDB();
