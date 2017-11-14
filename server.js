@@ -1,6 +1,6 @@
 'use strict';
 
-require('dotenv').config();
+// require('dotenv').config();
 console.log('iteration 3 loaded');
 // app dependencies
 const express = require('express');
