@@ -61,7 +61,7 @@ function createDB() {
   client.query(`
     CREATE TABLE IF NOT EXISTS users (
       user_id SERIAL PRIMARY KEY,
-      username UNIQUE VARCHAR(255) NOT NULL,
+      username VARCHAR(255) NOT NULL UNIQUE,
       password VARCHAR(255) NOT NULL,
       pantry VARCHAR(255), recipes VARCHAR(255)
     );
