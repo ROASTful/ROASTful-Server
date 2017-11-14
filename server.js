@@ -45,7 +45,7 @@ app.post('/v1/users', (request, response) => {
   client.query(`
     INSERT INTO users(user, password)
     Values($1, $2) ON CONFLICT DO NOTHING`,
-    [request.body.user, request.body.password]
+    [request.body.username, request.body.password]
   )
     .then( () => response.sendStatus(201))
     .catch(console.error)
