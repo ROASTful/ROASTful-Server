@@ -45,7 +45,7 @@ app.get('/recipes/search/*', (request, response) => {
 app.post('/v1/users', bodyParser, (request, response) => {
   console.log(request.body);
   client.query(`
-    INSERT INTO users(username ON CONFLICT DO NOTHING, password)
+    INSERT INTO users(username, password)
     Values($1, $2)`,
     [request.body.username, request.body.password]
   )
