@@ -54,7 +54,7 @@ app.post('/v1/users', bodyParser, (request, response) => {
 app.get('/test', (request, response) => response.send('Hello World'));
 // app.get('/*', (request, response) => response.redirect(CLIENT_URL));
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
+
 function createDB() {
   client.query(`
     CREATE TABLE IF NOT EXISTS users (
@@ -75,8 +75,10 @@ function createDB() {
       recipe_api_id VARCHAR(255) NOT NULL
     );`
   )
-    .then(console.log('user tables created'))
+    .then(console.log('user tables exist now'))
     .catch(console.error)
 //
 }
 createDB();
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
