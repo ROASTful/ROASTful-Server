@@ -40,26 +40,28 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
-app.post('/v1/users', (request, response) => {
+
+
+app.post('/v1/users', bodyParser, (request, response) => {
   console.log(request.body);
   client.query(`
-    INSERT INTO users(user, password)
-    Values($1, $2) ON CONFLICT DO NOTHING`,
-    [request.body.user, request.body.password]
+    INSERT INTO users(username, password)
+    Values($1, $2)`,
+    [request.body.username, request.body.password]
   )
-    .then( () => response.sendStatus(201))
+    .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
 })
 // api endpoints
 app.get('/test', (request, response) => response.send('Hello World'));
 // app.get('/*', (request, response) => response.redirect(CLIENT_URL));
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
+
 function createDB() {
   client.query(`
     CREATE TABLE IF NOT EXISTS users (
       user_id SERIAL PRIMARY KEY,
-      username VARCHAR(255) NOT NULL,
+      username VARCHAR(255) NOT NULL UNIQUE,
       password VARCHAR(255) NOT NULL,
       pantry VARCHAR(255), recipes VARCHAR(255)
     );
@@ -75,8 +77,10 @@ function createDB() {
       recipe_api_id VARCHAR(255) NOT NULL
     );`
   )
-    .then(console.log('user tables created'))
+    .then(console.log('user tables exist now'))
     .catch(console.error)
 //
 }
 createDB();
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
