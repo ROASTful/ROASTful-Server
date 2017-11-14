@@ -1,6 +1,6 @@
 'use strict';
 
-// require('dotenv').config();
+require('dotenv').config();
 console.log('iteration 3 loaded');
 // app dependencies
 const express = require('express');
@@ -40,7 +40,7 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
-app.post('/v1/users', (request, response) => {
+app.post('/v1/users', bodyParser, (request, response) => {
   console.log(request.body);
   client.query(`
     INSERT INTO users(user, password)
