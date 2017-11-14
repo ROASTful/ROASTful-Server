@@ -53,7 +53,7 @@ app.post('/v1/users', (req, res) => {
 // api endpoints
 app.get('/test', (req, res) => res.send('Hello World'));
 // app.get('/*', (req, res) => res.redirect(CLIENT_URL));
-// listen
+
 app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
 function createDB() {
   client.query(`
@@ -75,26 +75,8 @@ function createDB() {
       recipe_api_id VARCHAR(255) NOT NULL
     );`
   )
-    .then(console.log('user table created'))
+    .then(console.log('user tables created'))
     .catch(console.error)
-//   client.query(`
-//       CREATE TABLE IF NOT EXISTS
-//       ingredients (
-//         ingredient_id SERIAL PRIMARY KEY,
-//         ingredient_name VARCHAR(255) NOT NULL,
-//       );`
-//     )
-//       .then(console.log('ingredient table created'))
-//       .catch(console.error)
-//       client.query(`
-//         CREATE TABLE IF NOT EXISTS
-//         recipes (
-//           recipe_id SERIAL PRIMARY KEY,
-//           recipe_name VARCHAR(255) NOT NULL,
-//           recipe_api_id,
-//         );`
-//       )
-//         .then(console.log('table created'))
-//         .catch(console.error)
+//
 }
 createDB();
