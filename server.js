@@ -22,6 +22,8 @@ client.on('error', err => console.error(err));
 
 // middleware
 app.use(cors());
+app.use(bodyParser);
+app.use(require('body-parser').json());
 
 // proxy route
 // http://food2fork.com/api/get?key={API_KEY}&rId=54384
@@ -40,7 +42,7 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
-app.put('/v1/users/:username', bodyParser, (request, response) => {
+app.put('/v1/users/:username', (request, response) => {
   console.log(request.body);
   client.query(`
     UPDATE users
@@ -54,6 +56,7 @@ app.put('/v1/users/:username', bodyParser, (request, response) => {
 })
 
 app.get('/v1/users/:username', bodyParser, (request, response) => {
+  console.log(request.body);
     client.query(`
     SELECT * FROM users
     WHERE sterile_username = $1 AND password=$2
