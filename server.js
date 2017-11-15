@@ -49,7 +49,7 @@ app.put('/v1/users/:username', (request, response) => {
     SET pantry=$1, recipes=$2
     WHERE sterile_username=$3
     `,
-    [request.body.pantry, request.body.recipes, request.body.sterile_username]
+    [request.body.pantry, request.body.recipes, request.params.username.toLowerCase()]
   )
     .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
