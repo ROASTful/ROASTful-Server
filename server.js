@@ -1,6 +1,6 @@
 'use strict';
 
-// require('dotenv').config();
+require('dotenv').config();
 console.log('iteration 3 loaded');
 // app dependencies
 const express = require('express');
@@ -40,10 +40,10 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
-app.put('/v1/users/pantry', bodyParser, (request, response) => {
+app.put('/v1/users/:username', bodyParser, (request, response) => {
   console.log(request.body);
   client.query(`
-    UPDATE pantry
+    UPDATE users
     SET pantry=$1, recipes=$2
     WHERE sterile_username=$3
     `,
