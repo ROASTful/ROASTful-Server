@@ -51,7 +51,7 @@ app.put('/v1/users/pantry', bodyParser, (request, response) => {
   )
     .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
-}))
+})
 
 app.get('/v1/users/:username', bodyParser, (request, response) => {
     client.query(`
