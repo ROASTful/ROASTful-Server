@@ -40,7 +40,29 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
+app.put('/v1/users/pantry', bodyParser, (request, response) => {
+  console.log(request.body);
+  client.query(`
+    UPDATE pantry
+    SET pantry=$1, recipes=$2
+    WHERE sterile_username=$3
+    `,
+    [request.body.pantry, request.body.recipes, request.body.sterile_username]
+  )
+    .then( () => response.sendStatus(201), err => response.send(err))
+    .catch(console.error)
+}))
 
+app.get('/v1/users/:username', bodyParser, (request, response) => {
+    client.query(`
+    SELECT * FROM users
+    WHERE username = $1
+    `,
+    [request.params.username]
+  )
+    .then( () => response.send(results.rows), err => response.send(err))
+    .catch(console.error)
+})
 
 app.post('/v1/users', bodyParser, (request, response) => {
   console.log(request.body);
@@ -61,21 +83,22 @@ function createDB() {
   client.query(`
     CREATE TABLE IF NOT EXISTS users (
       user_id SERIAL PRIMARY KEY,
-      username VARCHAR(255) NOT NULL UNIQUE,
+      sterile_username VARCHAR(255) NOT NULL UNIQUE,
+      username VARCHAR(255) NOT NULL,
       password VARCHAR(255) NOT NULL,
-      pantry VARCHAR(255), recipes VARCHAR(255)
-    );
-
-    CREATE TABLE IF NOT EXISTS ingredients (
-      ingredient_id SERIAL PRIMARY KEY,
-      ingredient_name VARCHAR(255) NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS recipes (
-      recipe_id SERIAL PRIMARY KEY,
-      recipe_name VARCHAR(255) NOT NULL,
-      recipe_api_id VARCHAR(255) NOT NULL
+      pantry VARCHAR(255),
+      recipes VARCHAR(255)
     );`
+    // CREATE TABLE IF NOT EXISTS pantry (
+    //   ingredient_id SERIAL PRIMARY KEY,
+    //   ingredient_name VARCHAR(255) NOT NULL
+    // );
+    //
+    // CREATE TABLE IF NOT EXISTS recipes (
+    //   recipe_id SERIAL PRIMARY KEY,
+    //   recipe_name VARCHAR(255) NOT NULL,
+    //   recipe_api_id VARCHAR(255) NOT NULL
+    // );
   )
     .then(console.log('user tables exist now'))
     .catch(console.error)
