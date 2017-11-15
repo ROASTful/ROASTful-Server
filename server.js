@@ -67,9 +67,9 @@ app.get('/v1/users/:username', bodyParser, (request, response) => {
 app.post('/v1/users', bodyParser, (request, response) => {
   console.log(request.body);
   client.query(`
-    INSERT INTO users(username, password)
+    INSERT INTO users(sterile_username, username, password)
     Values($1, $2)`,
-    [request.body.username, request.body.password]
+    [request.body.username.toLowerCase(), request.body.username, request.body.password]
   )
     .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
