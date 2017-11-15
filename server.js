@@ -42,29 +42,28 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
-app.put('/v1/users/:username', (request, response) => {
+app.put('/v1/users/:id', (request, response) => {
   console.log(request.body);
   client.query(`
     UPDATE users
     SET pantry=$1, recipes=$2
-    WHERE sterile_username=$3
+    WHERE user_id=$3
     `,
-    [request.body.pantry, `${request.body.recipes}`, request.params.username.toLowerCase()]
+    [request.body.pantry, `,${request.body.recipes}`, request.params.id]
   )
     .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
 })
 
-app.get('/v1/users/:username', (request, response) => {
-  console.log(request.body);
+app.get('/v1/users/:username/:password', (request, response) => {
   console.log(request.params);
   client.query(`
     SELECT * FROM users
     WHERE sterile_username = $1 AND password=$2
     `,
-    [request.params.username, request.body.password]
+    [request.params.username, request.params.password]
   )
-    .then((results) => response.send(results.rows), err => response.send(err))
+    .then((results) => response.send(results.rows[0]), err => response.send(err))
     .catch(console.error)
 })
 
