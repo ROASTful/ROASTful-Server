@@ -46,7 +46,7 @@ app.put('/v1/users/:username', (request, response) => {
   console.log(request.body);
   client.query(`
     UPDATE users
-    SET pantry=$1, recipes=$2
+    SET pantry=$1, recipes=CONCAT(recipes, $2)
     WHERE sterile_username=$3
     `,
     [request.body.pantry, request.body.recipes, request.params.username.toLowerCase()]
