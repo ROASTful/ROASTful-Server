@@ -55,14 +55,13 @@ app.put('/v1/users/:username', (request, response) => {
     .catch(console.error)
 })
 
-app.get('/v1/users/:username', (request, response) => {
-  console.log(request.body);
+app.get('/v1/users/:username/:password', (request, response) => {
   console.log(request.params);
   client.query(`
     SELECT * FROM users
     WHERE sterile_username = $1 AND password=$2
     `,
-    [request.params.username, request.body.password]
+    [request.params.username, request.params.password]
   )
     .then((results) => response.send(results.rows), err => response.send(err))
     .catch(console.error)
