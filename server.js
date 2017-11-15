@@ -60,7 +60,7 @@ app.get('/v1/users/:username', bodyParser, (request, response) => {
     `,
     [request.params.username, request.body.password]
   )
-    .then( () => response.send(results.rows), err => response.send(err))
+    .then((result) => response.send(results.rows), err => response.send(err))
     .catch(console.error)
 })
 
