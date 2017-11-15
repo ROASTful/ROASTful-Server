@@ -69,7 +69,7 @@ app.post('/v1/users', bodyParser, (request, response) => {
   client.query(`
     INSERT INTO users(sterile_username, username, password)
     Values($1, $2)`,
-    [request.body.username.toLowerCase(), request.body.username, request.body.password]
+    [request.body.username, request.body.username, request.body.password]
   )
     .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
@@ -83,7 +83,7 @@ function createDB() {
   client.query(`
     CREATE TABLE IF NOT EXISTS users (
       user_id SERIAL PRIMARY KEY,
-      sterile_username VARCHAR(255) NOT NULL UNIQUE,
+      sterile_username VARCHAR(255),
       username VARCHAR(255) NOT NULL,
       password VARCHAR(255) NOT NULL,
       pantry VARCHAR(255),
