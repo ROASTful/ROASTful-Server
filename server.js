@@ -42,14 +42,14 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
-app.put('/v1/users/:username', (request, response) => {
+app.put('/v1/users/:id', (request, response) => {
   console.log(request.body);
   client.query(`
     UPDATE users
     SET pantry=$1, recipes=CONCAT(recipes, $2)
     WHERE sterile_username=$3
     `,
-    [request.body.pantry, `,${request.body.recipes}`, request.params.username.toLowerCase()]
+    [request.body.pantry, `,${request.body.recipes}`, request.params.id]
   )
     .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
