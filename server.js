@@ -63,7 +63,7 @@ app.get('/v1/users/:username/:password', (request, response) => {
     `,
     [request.params.username, request.params.password]
   )
-    .then((results) => response.send(results.rows), err => response.send(err))
+    .then((results) => response.send(results.rows[0]), err => response.send(err))
     .catch(console.error)
 })
 
