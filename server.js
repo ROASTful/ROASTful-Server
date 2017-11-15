@@ -49,7 +49,7 @@ app.put('/v1/users/:username', (request, response) => {
     SET pantry=$1, recipes=CONCAT(recipes, $2)
     WHERE sterile_username=$3
     `,
-    [request.body.pantry, request.body.recipes, request.params.username.toLowerCase()]
+    [request.body.pantry, `,${request.body.recipes}`, request.params.username.toLowerCase()]
   )
     .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
@@ -57,13 +57,14 @@ app.put('/v1/users/:username', (request, response) => {
 
 app.get('/v1/users/:username', (request, response) => {
   console.log(request.body);
-    client.query(`
+  console.log(request.params);
+  client.query(`
     SELECT * FROM users
     WHERE sterile_username = $1 AND password=$2
     `,
     [request.params.username, request.body.password]
   )
-    .then((result) => response.send(results.rows), err => response.send(err))
+    .then((results) => response.send(results.rows), err => response.send(err))
     .catch(console.error)
 })
 
