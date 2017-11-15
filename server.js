@@ -55,7 +55,7 @@ app.put('/v1/users/:username', (request, response) => {
     .catch(console.error)
 })
 
-app.get('/v1/users/:username', bodyParser, (request, response) => {
+app.get('/v1/users/:username', (request, response) => {
   console.log(request.body);
     client.query(`
     SELECT * FROM users
@@ -67,7 +67,7 @@ app.get('/v1/users/:username', bodyParser, (request, response) => {
     .catch(console.error)
 })
 
-app.post('/v1/users', bodyParser, (request, response) => {
+app.post('/v1/users', (request, response) => {
   console.log(request.body);
   client.query(`
     INSERT INTO users(sterile_username, username, password)
