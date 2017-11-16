@@ -103,6 +103,18 @@ app.put('/v1/users/:id', (request, response) => {
   .catch(console.error)
 })
 
+app.post('/db/recipes/:recipeid', (request, response) => {
+  console.log(request.body);
+  client.query(`
+    INSERT INTO recipes(recipe_id, image_url, ingredients, source_url, title)
+    VALUES($1, $2, $3, $4, $5)
+    `,
+    [request.params.recipeid, request.body.image_url, request.body.ingredients, request.body.source_url, request.body.title]
+  )
+  .then( () => response.sendStatus(201), err => response.send(err))
+  .catch(console.error)
+})
+
 createDB();
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
@@ -123,7 +135,7 @@ function createDB() {
       recipes TEXT
     );
     CREATE TABLE IF NOT EXISTS recipes (
-      recipe_id INT PRIMARY KEY,
+      recipe_id INT PRIMARY KEY UNIQUE,
       image_url VARCHAR(255),
       ingredients TEXT,
       source_url VARCHAR(255),
