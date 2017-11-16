@@ -49,7 +49,7 @@ app.put('/v1/users/:id', (request, response) => {
     SET pantry=$1, recipes=$2
     WHERE user_id=$3
     `,
-    [request.body.pantry, `,${request.body.recipes}`, request.params.id]
+    [request.body.pantry, request.body.recipes, request.params.id]
   )
     .then( () => response.sendStatus(201), err => response.send(err))
     .catch(console.error)
