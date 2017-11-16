@@ -119,20 +119,23 @@ function createDB() {
       sterile_username VARCHAR(255) UNIQUE,
       username VARCHAR(255) NOT NULL,
       password VARCHAR(255) NOT NULL,
-      pantry VARCHAR(255),
-      recipes VARCHAR(255)
+      pantry TEXT,
+      recipes TEXT
+    );
+    CREATE TABLE IF NOT EXISTS recipes (
+      recipe_id INT PRIMARY KEY,
+      image_url VARCHAR(255),
+      ingredients TEXT,
+      source_url VARCHAR(255),
+      title VARCHAR(255)
     );`
-    // CREATE TABLE IF NOT EXISTS pantry (
-    //   ingredient_id SERIAL PRIMARY KEY,
-    //   ingredient_name VARCHAR(255) NOT NULL
-    // );
-    //
-    // CREATE TABLE IF NOT EXISTS recipes (
-    //   recipe_id SERIAL PRIMARY KEY,
-    //   recipe_name VARCHAR(255) NOT NULL,
-    //   recipe_api_id VARCHAR(255) NOT NULL
-    // );
   )
     .then(console.log('user tables exist now'))
     .catch(console.error)
 }
+
+// CREATE TABLE IF NOT EXISTS pantry (
+  //   ingredient_id SERIAL PRIMARY KEY,
+  //   ingredient_name VARCHAR(255) NOT NULL
+  // );
+  //
