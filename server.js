@@ -69,6 +69,15 @@ app.get('/returning/:user_id', (request, response) => {
     .then((results) => response.send(results.rows[0]), err => response.send(err));
   })
 
+  app.get('/db/recipes/:recipe_id', (request, response) => {
+    console.log(request.params);
+    client.query(`
+      SELECT * FROM recipes
+      WHERE recipe_id=${request.params.recipe_id};
+      `)
+      .then((results) => response.send(results.rows[0]), err => response.send(err));
+    })
+
 // api endpoints
 app.get('/test', (request, response) => response.send('Hello World'));
 // app.get('/*', (request, response) => response.redirect(CLIENT_URL));
