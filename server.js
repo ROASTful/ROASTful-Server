@@ -67,6 +67,16 @@ app.get('/v1/users/:username/:password', (request, response) => {
     .catch(console.error)
 })
 
+// ============ RETURNING USER ============ //
+app.get('/v1/users/returning/:user_id', (request, response) {
+  console.log(request.params);
+  client.query(`
+    SELECT * FROM users
+    WHERE user_id=${request.params.user_id};
+    `)
+    .then((results) => response.send(results.rows[0]), err => response.send(err));
+}
+
 app.post('/v1/users', (request, response) => {
   console.log(request.body);
   client.query(`
