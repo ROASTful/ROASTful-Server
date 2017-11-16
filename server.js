@@ -118,7 +118,7 @@ app.post('/db/recipes/:recipeid', (request, response) => {
     INSERT INTO recipes(recipe_id, image_url, ingredients, source_url, title)
     VALUES($1, $2, $3, $4, $5)
     `,
-    [request.params.recipeid, request.body.image_url, request.body.ingredients, request.body.source_url, request.body.title]
+    [request.params.recipeid, request.body.image_url, JSON.stringify(request.body.ingredients), request.body.source_url, request.body.title]
   )
   .then( () => response.sendStatus(201), err => response.send(err))
   .catch(console.error)
