@@ -25,7 +25,9 @@ app.use(cors());
 app.use(bodyParser);
 app.use(require('body-parser').json());
 
-// proxy route
+// ===============================================================
+// ====================== PROXY ROUTES ===========================
+// ===============================================================
 // http://food2fork.com/api/get?key={API_KEY}&rId=54384
 app.get('/recipes/ingredient/:id', (request, response) => {
   console.log(`Ingredient request for ${request.params.id}`)
@@ -42,19 +44,9 @@ app.get('/recipes/search/*', (request, response) => {
   .then(recipes => response.send(recipes.text), err => response.send(err));
 });
 
-app.put('/v1/users/:id', (request, response) => {
-  console.log(request.body);
-  client.query(`
-    UPDATE users
-    SET pantry=$1, recipes=$2
-    WHERE user_id=$3
-    `,
-    [request.body.pantry, request.body.recipes, request.params.id]
-  )
-    .then( () => response.sendStatus(201), err => response.send(err))
-    .catch(console.error)
-})
-
+// ===============================================================
+// ========================= GET ROUTES ==========================
+// ===============================================================
 app.get('/v1/users/:username/:password', (request, response) => {
   console.log(request.params);
   client.query(`
@@ -68,15 +60,22 @@ app.get('/v1/users/:username/:password', (request, response) => {
 })
 
 // ============ RETURNING USER ============ //
-app.get('/v1/users/returning/:user_id', (request, response) => {
+app.get('/returning/:user_id', (request, response) => {
   console.log(request.params);
   client.query(`
     SELECT * FROM users
     WHERE user_id=${request.params.user_id};
     `)
     .then((results) => response.send(results.rows[0]), err => response.send(err));
-})
+  })
 
+// api endpoints
+app.get('/test', (request, response) => response.send('Hello World'));
+// app.get('/*', (request, response) => response.redirect(CLIENT_URL));
+
+// ===============================================================
+// ====================== POST ROUTES ============================
+// ===============================================================
 app.post('/v1/users', (request, response) => {
   console.log(request.body);
   client.query(`
@@ -84,13 +83,34 @@ app.post('/v1/users', (request, response) => {
     Values($1, $2, $3)`,
     [request.body.username.toLowerCase(), request.body.username, request.body.password]
   )
-    .then( () => response.sendStatus(201), err => response.send(err))
-    .catch(console.error)
+  .then( () => response.sendStatus(201), err => response.send(err))
+  .catch(console.error)
 })
-// api endpoints
-app.get('/test', (request, response) => response.send('Hello World'));
-// app.get('/*', (request, response) => response.redirect(CLIENT_URL));
 
+// ===============================================================
+// ===================== PUT ROUTES =============================
+// ===============================================================
+app.put('/v1/users/:id', (request, response) => {
+  console.log(request.body);
+  client.query(`
+    UPDATE users
+    SET pantry=$1, recipes=$2
+    WHERE user_id=$3
+    `,
+    [request.body.pantry, request.body.recipes, request.params.id]
+  )
+  .then( () => response.sendStatus(201), err => response.send(err))
+  .catch(console.error)
+})
+
+createDB();
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
+
+
+// ===============================================================
+// ========================= FUNCTIONS ===========================
+// ===============================================================
 
 function createDB() {
   client.query(`
@@ -115,8 +135,4 @@ function createDB() {
   )
     .then(console.log('user tables exist now'))
     .catch(console.error)
-//
 }
-createDB();
-
-app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
