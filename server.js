@@ -68,7 +68,7 @@ app.get('/v1/users/:username/:password', (request, response) => {
 })
 
 // ============ RETURNING USER ============ //
-app.get('/v1/users/returning/:user_id', (request, response) {
+app.get('/v1/users/returning/:user_id', (request, response) => {
   console.log(request.params);
   client.query(`
     SELECT * FROM users
