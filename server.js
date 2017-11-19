@@ -151,7 +151,7 @@ function createDB() {
       recipes TEXT
     );
     CREATE TABLE IF NOT EXISTS recipes (
-      recipe_id VARCHAR(10) PRIMARY KEY UNIQUE,
+      recipe_id VARCHAR(10) UNIQUE,
       image_url VARCHAR(255),
       ingredients TEXT,
       source_url VARCHAR(255),
