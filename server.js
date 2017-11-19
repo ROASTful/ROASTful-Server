@@ -75,7 +75,7 @@ app.get('/db/recipes/:recipe_id', (request, response) => {
     SELECT * FROM recipes
     WHERE recipe_id='${request.params.recipe_id}';
     `)
-    .then((results) => response.send(results.rows), err => response.send(err));
+    .then((results) => response.send(results.rows[0]), err => response.send(err));
 })
 
 app.get('/savedrecipes', (request, response) => {
