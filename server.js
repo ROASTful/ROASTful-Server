@@ -13,7 +13,7 @@ const bodyParser = require('body-parser').urlencoded({extended: true});
 // app setup
 const app = express();
 const PORT = process.env.PORT;
-const CLIENT_URL = process.env.CLIENT_URL;
+// const CLIENT_URL = process.env.CLIENT_URL;
 
 // database setup //
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -73,7 +73,7 @@ app.get('/db/recipes/:recipe_id', (request, response) => {
   console.log(request.params);
   client.query(`
     SELECT * FROM recipes
-    WHERE recipe_id=${request.params.recipe_id};
+    WHERE recipe_id='${request.params.recipe_id}';
     `)
     .then((results) => response.send(results.rows), err => response.send(err));
 })
